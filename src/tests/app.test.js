@@ -31,7 +31,11 @@ test ("App component renders base show information following API call", async ()
 
 test ("Episodes Appear After Season Is Selected", ()=>{
 
-    render(<Episodes episodes={episodesData} />);
+    const { rerender }=render(<Episodes episodes={[]}/>)
+
+    expect(screen.queryByText(/Chapter One/i)).toBeNull();
+
+    rerender(<Episodes episodes={episodesData} />);
 
     expect(screen.getByText(/Chapter One/i)).toBeInTheDocument();
 
