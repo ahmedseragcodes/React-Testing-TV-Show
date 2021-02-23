@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Dropdown from "react-dropdown";
 import parse from "html-react-parser";
-
+//Importing API
+import { fetchShow } from "./api/fetchShow";
+//Importing Helper Function
 import { formatSeasons } from "./utils/formatSeasons";
 
 import Episodes from "./components/Episodes";
@@ -15,17 +17,14 @@ export default function App() {
   const episodes = seasons[selectedSeason] || [];
 
   useEffect(() => {
-    const fetchShow = () => {
-      axios
-        .get(
-          "https://api.tvmaze.com/singlesearch/shows?q=stranger-things&embed=episodes"
-        )
-        .then(res => {
-          setShow(res.data);
-          setSeasons(formatSeasons(res.data._embedded.episodes));
-        });
-    };
-    fetchShow();
+    fetchShow()
+    .then((res)=>{
+      setShow(res.data);
+      setSeasons(formatSeasons(res.data._embedded.episodes));
+    })
+    .catch((err)=>{
+      console.log("APP JS FILE, useEffect Error", err);
+    })
   }, []);
 
   const handleSelect = e => {
